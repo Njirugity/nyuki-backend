@@ -1,7 +1,7 @@
 package com.nyuki.nyuki_backend.goals.entity;
 
 import com.nyuki.nyuki_backend.common.baseentity.BaseEntity;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,4 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Goal extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 }
