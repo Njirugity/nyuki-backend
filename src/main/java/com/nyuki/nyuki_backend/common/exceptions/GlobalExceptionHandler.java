@@ -22,6 +22,26 @@ public class GlobalExceptionHandler {
         ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value(), LocalDate.now());
         return ResponseEntity.badRequest().body(errors);
     }
+    @ExceptionHandler(GoalNotFoundException.class)
+    public ResponseEntity<ApiMessageResponse> goalNotFoundException(GoalNotFoundException e){
+        ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDate.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
+    @ExceptionHandler(StrategyNotFoundException.class)
+    public ResponseEntity<ApiMessageResponse> strategyNotFoundException(StrategyNotFoundException e){
+        ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDate.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<ApiMessageResponse> taskNotFoundException(TaskNotFoundException e){
+        ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDate.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ApiMessageResponse> invalidRequestException(InvalidRequestException e){
+        ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value(), LocalDate.now());
+        return ResponseEntity.badRequest().body(errors);
+    }
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiMessageResponse> badCredentialsException(BadCredentialsException e){
         ApiMessageResponse errors =  new ApiMessageResponse("Invalid email or password", HttpStatus.UNAUTHORIZED.value(), LocalDate.now());
