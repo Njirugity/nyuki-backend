@@ -1,6 +1,5 @@
 package com.nyuki.nyuki_backend.strategies.repository;
 
-import com.nyuki.nyuki_backend.goals.entity.Goal;
 import com.nyuki.nyuki_backend.strategies.entity.Strategy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +15,6 @@ import java.util.UUID;
 public interface StrategiesRepository extends JpaRepository<Strategy, UUID> {
 
     Optional<Strategy> findByIdAndOwnerEmail(UUID id, String email);
-
-    void deleteByGoal(Goal goal);
 
     @Query(value = """
             SELECT s FROM Strategy s

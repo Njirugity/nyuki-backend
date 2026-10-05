@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-10-01T23:51:52+0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.12.1 (Ubuntu)"
+    date = "2026-10-05T17:34:55+0300",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260826-1225, environment: Java 21.0.12.1 (Eclipse Adoptium)"
 )
 @Component
 public class GoalsMapperImpl implements GoalsMapper {
@@ -28,12 +28,12 @@ public class GoalsMapperImpl implements GoalsMapper {
 
         Goal goal = new Goal();
 
-        goal.setTitle( dto.title() );
         goal.setDescription( dto.description() );
-        goal.setStartDate( dto.startDate() );
         goal.setEndDate( dto.endDate() );
-        goal.setStatus( dto.status() );
         goal.setPriority( dto.priority() );
+        goal.setStartDate( dto.startDate() );
+        goal.setStatus( dto.status() );
+        goal.setTitle( dto.title() );
 
         return goal;
     }
@@ -75,23 +75,23 @@ public class GoalsMapperImpl implements GoalsMapper {
             return;
         }
 
-        if ( dto.title() != null ) {
-            goal.setTitle( dto.title() );
-        }
         if ( dto.description() != null ) {
             goal.setDescription( dto.description() );
-        }
-        if ( dto.startDate() != null ) {
-            goal.setStartDate( dto.startDate() );
         }
         if ( dto.endDate() != null ) {
             goal.setEndDate( dto.endDate() );
         }
+        if ( dto.priority() != null ) {
+            goal.setPriority( dto.priority() );
+        }
+        if ( dto.startDate() != null ) {
+            goal.setStartDate( dto.startDate() );
+        }
         if ( dto.status() != null ) {
             goal.setStatus( dto.status() );
         }
-        if ( dto.priority() != null ) {
-            goal.setPriority( dto.priority() );
+        if ( dto.title() != null ) {
+            goal.setTitle( dto.title() );
         }
     }
 }

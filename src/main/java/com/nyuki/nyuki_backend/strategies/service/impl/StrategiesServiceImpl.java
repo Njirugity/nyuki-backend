@@ -75,9 +75,7 @@ public class StrategiesServiceImpl implements StrategiesService {
     @Override
     @Transactional
     public void delete(UUID strategyId, String email){
-        Strategy strategy = findOwnedStrategy(strategyId, email);
-        tasksRepository.deleteByStrategy(strategy);
-        strategiesRepository.delete(strategy);
+        strategiesRepository.delete(findOwnedStrategy(strategyId, email));
     }
 
     private Strategy findOwnedStrategy(UUID strategyId, String email){

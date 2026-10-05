@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-10-02T09:56:36+0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.12.1 (Ubuntu)"
+    date = "2026-10-05T17:34:56+0300",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260826-1225, environment: Java 21.0.12.1 (Eclipse Adoptium)"
 )
 @Component
 public class TasksMapperImpl implements TasksMapper {
@@ -30,12 +30,12 @@ public class TasksMapperImpl implements TasksMapper {
 
         Task task = new Task();
 
-        task.setTitle( dto.title() );
         task.setDescription( dto.description() );
-        task.setStartDate( dto.startDate() );
         task.setDueDate( dto.dueDate() );
-        task.setStatus( dto.status() );
         task.setPriority( dto.priority() );
+        task.setStartDate( dto.startDate() );
+        task.setStatus( dto.status() );
+        task.setTitle( dto.title() );
 
         return task;
     }
@@ -83,23 +83,23 @@ public class TasksMapperImpl implements TasksMapper {
             return;
         }
 
-        if ( dto.title() != null ) {
-            task.setTitle( dto.title() );
-        }
         if ( dto.description() != null ) {
             task.setDescription( dto.description() );
-        }
-        if ( dto.startDate() != null ) {
-            task.setStartDate( dto.startDate() );
         }
         if ( dto.dueDate() != null ) {
             task.setDueDate( dto.dueDate() );
         }
+        if ( dto.priority() != null ) {
+            task.setPriority( dto.priority() );
+        }
+        if ( dto.startDate() != null ) {
+            task.setStartDate( dto.startDate() );
+        }
         if ( dto.status() != null ) {
             task.setStatus( dto.status() );
         }
-        if ( dto.priority() != null ) {
-            task.setPriority( dto.priority() );
+        if ( dto.title() != null ) {
+            task.setTitle( dto.title() );
         }
     }
 

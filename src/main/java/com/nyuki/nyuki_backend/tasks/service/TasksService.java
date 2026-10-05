@@ -4,6 +4,7 @@ import com.nyuki.nyuki_backend.common.enums.ProgressStatus;
 import com.nyuki.nyuki_backend.tasks.dto.CreateTaskDto;
 import com.nyuki.nyuki_backend.tasks.dto.TaskResponseDto;
 import com.nyuki.nyuki_backend.tasks.dto.UpdateTaskDto;
+import com.nyuki.nyuki_backend.tasks.entity.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,5 @@ public interface TasksService {
                                    ProgressStatus status, Pageable pageable);
     TaskResponseDto update(UUID taskId, UpdateTaskDto dto, String email);
     void delete(UUID taskId, String email);
+    Task findOwnedTask(UUID taskId, String email);
 }

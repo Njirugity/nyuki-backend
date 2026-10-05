@@ -120,7 +120,8 @@ public class TasksServiceImpl implements TasksService {
         }
     }
 
-    private Task findOwnedTask(UUID taskId, String email){
+    @Override
+    public Task findOwnedTask(UUID taskId, String email){
         return tasksRepository.findByIdAndOwnerEmail(taskId, email).orElseThrow(()->
                 new TaskNotFoundException("Task not found")
         );

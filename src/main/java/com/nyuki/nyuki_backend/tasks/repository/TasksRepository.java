@@ -20,10 +20,6 @@ public interface TasksRepository extends JpaRepository<Task, UUID> {
 
     Optional<Task> findByIdAndOwnerEmail(UUID id, String email);
 
-    void deleteByGoal(Goal goal);
-
-    void deleteByStrategy(Strategy strategy);
-
     @Modifying
     @Query("UPDATE Task t SET t.goal = :goal WHERE t.strategy = :strategy")
     void updateGoalForStrategy(@Param("strategy") Strategy strategy, @Param("goal") Goal goal);

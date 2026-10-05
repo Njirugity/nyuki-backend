@@ -6,6 +6,8 @@ import com.nyuki.nyuki_backend.common.enums.ProgressStatus;
 import com.nyuki.nyuki_backend.goals.entity.Goal;
 import com.nyuki.nyuki_backend.users.entity.Users;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,5 +30,6 @@ public class Strategy extends BaseEntity {
     private Users owner;
     @ManyToOne
     @JoinColumn(name = "goal_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Goal goal;
 }

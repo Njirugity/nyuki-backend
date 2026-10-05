@@ -11,8 +11,6 @@ import com.nyuki.nyuki_backend.goals.entity.Goal;
 import com.nyuki.nyuki_backend.goals.mapper.GoalsMapper;
 import com.nyuki.nyuki_backend.goals.repository.GoalsRepository;
 import com.nyuki.nyuki_backend.goals.service.GoalsService;
-import com.nyuki.nyuki_backend.strategies.repository.StrategiesRepository;
-import com.nyuki.nyuki_backend.tasks.repository.TasksRepository;
 import com.nyuki.nyuki_backend.users.entity.Users;
 import com.nyuki.nyuki_backend.users.repository.UsersRepository;
 import jakarta.transaction.Transactional;
@@ -30,8 +28,6 @@ public class GoalsServiceImpl implements GoalsService {
     private final GoalsRepository goalsRepository;
     private final GoalsMapper goalsMapper;
     private final UsersRepository usersRepository;
-    private final StrategiesRepository strategiesRepository;
-    private final TasksRepository tasksRepository;
 
     @Override
     @Transactional
@@ -74,10 +70,7 @@ public class GoalsServiceImpl implements GoalsService {
     @Override
     @Transactional
     public void delete(UUID goalId, String email){
-        Goal goal = findOwnedGoal(goalId, email);
-        tasksRepository.deleteByGoal(goal);
-        strategiesRepository.deleteByGoal(goal);
-        goalsRepository.delete(goal);
+        goalsRepository.delete(findOwnedGoal(goalId, email));
     }
 
     private Goal findOwnedGoal(UUID goalId, String email){

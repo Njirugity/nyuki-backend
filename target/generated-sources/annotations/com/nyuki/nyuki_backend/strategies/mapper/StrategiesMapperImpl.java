@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-10-02T09:56:36+0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.12.1 (Ubuntu)"
+    date = "2026-10-05T17:34:56+0300",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.46.100.v20260826-1225, environment: Java 21.0.12.1 (Eclipse Adoptium)"
 )
 @Component
 public class StrategiesMapperImpl implements StrategiesMapper {
@@ -26,8 +26,8 @@ public class StrategiesMapperImpl implements StrategiesMapper {
 
         Strategy strategy = new Strategy();
 
-        strategy.setTitle( dto.title() );
         strategy.setDescription( dto.description() );
+        strategy.setTitle( dto.title() );
 
         return strategy;
     }
@@ -65,11 +65,11 @@ public class StrategiesMapperImpl implements StrategiesMapper {
             return;
         }
 
-        if ( dto.title() != null ) {
-            strategy.setTitle( dto.title() );
-        }
         if ( dto.description() != null ) {
             strategy.setDescription( dto.description() );
+        }
+        if ( dto.title() != null ) {
+            strategy.setTitle( dto.title() );
         }
     }
 
