@@ -37,6 +37,26 @@ public class GlobalExceptionHandler {
         ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDate.now());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
+    @ExceptionHandler(ScheduleNotFoundException.class)
+    public ResponseEntity<ApiMessageResponse> scheduleNotFoundException(ScheduleNotFoundException e){
+        ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDate.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
+    @ExceptionHandler(FocusSessionNotFoundException.class)
+    public ResponseEntity<ApiMessageResponse> focusSessionNotFoundException(FocusSessionNotFoundException e){
+        ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDate.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
+    @ExceptionHandler(ToDoListNotFoundException.class)
+    public ResponseEntity<ApiMessageResponse> toDoListNotFoundException(ToDoListNotFoundException e){
+        ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDate.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
+    @ExceptionHandler(ToDoItemNotFoundException.class)
+    public ResponseEntity<ApiMessageResponse> toDoItemNotFoundException(ToDoItemNotFoundException e){
+        ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDate.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<ApiMessageResponse> invalidRequestException(InvalidRequestException e){
         ApiMessageResponse errors =  new ApiMessageResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value(), LocalDate.now());
