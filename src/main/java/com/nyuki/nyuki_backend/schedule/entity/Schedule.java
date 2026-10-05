@@ -1,10 +1,18 @@
 package com.nyuki.nyuki_backend.schedule.entity;
 
 import com.nyuki.nyuki_backend.common.baseentity.BaseEntity;
+import com.nyuki.nyuki_backend.common.enums.ProgressStatus;
+import com.nyuki.nyuki_backend.tasks.entity.Task;
+import com.nyuki.nyuki_backend.users.entity.Users;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -12,6 +20,16 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Schedule extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
+    private String notes;
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Task task;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users owner;
 }
