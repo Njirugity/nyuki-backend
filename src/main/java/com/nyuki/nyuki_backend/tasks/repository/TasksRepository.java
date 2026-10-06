@@ -1,6 +1,8 @@
 package com.nyuki.nyuki_backend.tasks.repository;
 
 import com.nyuki.nyuki_backend.common.enums.ProgressStatus;
+import com.nyuki.nyuki_backend.analytics.dto.TaskCountDto;
+import com.nyuki.nyuki_backend.analytics.dto.TaskSummaryDto;
 import com.nyuki.nyuki_backend.goals.entity.Goal;
 import com.nyuki.nyuki_backend.strategies.entity.Strategy;
 import com.nyuki.nyuki_backend.tasks.entity.Task;
@@ -12,6 +14,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,4 +59,33 @@ public interface TasksRepository extends JpaRepository<Task, UUID> {
     Page<Task> searchByOwner(@Param("email") String email, @Param("search") String search,
                              @Param("goalId") UUID goalId, @Param("strategyId") UUID strategyId,
                              @Param("status") ProgressStatus status, Pageable pageable);
+
+    @Query("""
+        SELECT new com.nyuki.nyuki_backend.analytics.dto.TaskSummaryDto(
+            t.id, t.title, t.dueDate, t.status, g.title
+            ) FROM Task t
+        LEFT JOIN t.goal g
+        WHERE t.owner.email = :email
+        AND t.status IN (
+                  com.nyuki.nyuki_backend.common.enums.ProgressStatus.NOT_STARTED,
+                  com.nyuki.nyuki_backend.common.enums.ProgressStatus.ACTIVE,
+                  com.nyuki.nyuki_backend.common.enums.ProgressStatus.PAUSED
+              )
+        AND COALESCE(t.startDate, t.dueDate) <= :today
+        ORDER BY t.dueDate ASC
+    """)
+    List<TaskSummaryDto> findActiveAndOverdueTask(@Param("email")String email, @Param("today") LocalDate today);
+
+    @Query("""
+        SELECT new com.nyuki.nyuki_backend.analytics.dto.TaskCountDto(
+            COUNT(t),
+            COALESCE(SUM(CASE WHEN t.status = com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END ),0L),
+            COALESCE(SUM(CASE WHEN t.status = com.nyuki.nyuki_backend.common.enums.ProgressStatus.ACTIVE THEN 1 ELSE 0 END ),0L),
+            COALESCE(SUM(CASE WHEN t.dueDate < :today AND t.status != com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END ),0L)
+            ) FROM Task t
+        WHERE t.owner.email = :email
+    """)
+    Optional<TaskCountDto> countAllCompletedActiveOverDueTasks(@Param("email")String email, @Param("today") LocalDate today);
+
+
 }

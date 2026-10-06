@@ -1,5 +1,8 @@
 package com.nyuki.nyuki_backend.goals.repository;
 
+import com.nyuki.nyuki_backend.analytics.dto.GoalCountDto;
+import com.nyuki.nyuki_backend.analytics.dto.GoalSummaryDto;
+import com.nyuki.nyuki_backend.analytics.dto.TaskCountByGoal;
 import com.nyuki.nyuki_backend.goals.entity.Goal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,4 +45,46 @@ public interface GoalsRepository extends JpaRepository<Goal, UUID> {
                    OR LOWER(g.description) LIKE LOWER(CONCAT('%', CAST(:search AS String), '%')))
             """)
     Page<Goal> searchByOwner(@Param("email") String email, @Param("search") String search, Pageable pageable);
+
+    @Query("""
+        SELECT new com.nyuki.nyuki_backend.analytics.dto.TaskCountByGoal(
+            g.id,
+            g.title,
+            g.priority,
+            COUNT(t),
+            COALESCE(SUM(CASE WHEN t.status = com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END ),0L),
+            COALESCE(SUM(CASE WHEN t.status = com.nyuki.nyuki_backend.common.enums.ProgressStatus.ACTIVE THEN 1 ELSE 0 END ),0L),
+            COALESCE(SUM(CASE WHEN t.dueDate < :today AND t.status != com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END ),0L)
+            ) FROM Goal g
+        LEFT JOIN Task t ON t.goal.id = g.id
+        WHERE g.owner.email = :email
+        GROUP BY g.id, g.title
+    """)
+    List<TaskCountByGoal> findAllTaskCounts(@Param("email") String email, @Param("today")LocalDate today);
+
+    @Query("""
+        SELECT new com.nyuki.nyuki_backend.analytics.dto.GoalCountDto(
+            COUNT(g),
+            COALESCE(SUM(CASE WHEN g.status = com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END),0L),
+            COALESCE(SUM(CASE WHEN g.status = com.nyuki.nyuki_backend.common.enums.ProgressStatus.ACTIVE THEN 1 ELSE 0 END),0L),
+            COALESCE(SUM(CASE WHEN g.endDate < :today AND g.status != com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END), 0L)
+            ) FROM Goal g
+        WHERE g.owner.email = :email
+    """)
+    Optional<GoalCountDto> findTotalActiveCompletedOverDueGoals(@Param("email") String email, @Param("today")LocalDate today);
+
+    @Query("""
+        SELECT new com.nyuki.nyuki_backend.analytics.dto.GoalSummaryDto(
+            g.id, g.title, g.endDate, g.status, g.priority
+            ) FROM Goal g
+         WHERE g.owner.email = :email
+         AND g.status IN(
+                  com.nyuki.nyuki_backend.common.enums.ProgressStatus.NOT_STARTED,
+                  com.nyuki.nyuki_backend.common.enums.ProgressStatus.ACTIVE,
+                  com.nyuki.nyuki_backend.common.enums.ProgressStatus.PAUSED
+             )
+         AND COALESCE(g.startDate, g.endDate) <= :today
+         ORDER BY g.endDate ASC
+    """)
+    List<GoalSummaryDto> findActiveAndOverdueGoals(@Param("email") String email, @Param("today")LocalDate today);
 }
