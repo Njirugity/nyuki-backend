@@ -11,6 +11,7 @@ public record TaskCountByGoal(
         long totalTasks,
         long completedTasks,
         long activeTasks,
+        long notStartedTasks,
         long overDueTasks
 ) {
 }

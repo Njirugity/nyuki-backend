@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +42,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, UUID> {
     """)
     List<UpcomingScheduleDto> findUpcomingSchedulesWithinWindow(
             @Param("email") String email,
-            @Param("now") LocalDateTime now,
-            @Param("windowEnd") LocalDateTime windowEnd
+            @Param("now") Instant now,
+            @Param("windowEnd") Instant windowEnd
     );
 }

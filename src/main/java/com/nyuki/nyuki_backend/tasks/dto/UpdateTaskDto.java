@@ -5,7 +5,7 @@ import com.nyuki.nyuki_backend.common.enums.ProgressStatus;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 public record UpdateTaskDto(
@@ -13,8 +13,8 @@ public record UpdateTaskDto(
         @Size(max = 255, message = "Title must be at most 255 characters")
         String title,
         String description,
-        LocalDate startDate,
-        LocalDate dueDate,
+        Instant startDate,
+        Instant dueDate,
         ProgressStatus status,
         Priority priority,
         UUID goalId,

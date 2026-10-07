@@ -12,7 +12,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -23,11 +23,11 @@ public class FocusSession extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private LocalDateTime startedAt;
-    private LocalDateTime endedAt;
+    private Instant startedAt;
+    private Instant endedAt;
     private Long duration;
     // Set while the session is paused; cleared on resume or stop
-    private LocalDateTime pausedAt;
+    private Instant pausedAt;
     // Total time spent paused, excluded from the duration
     private Long pausedSeconds;
     @Enumerated(EnumType.STRING)

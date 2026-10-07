@@ -23,7 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -46,7 +46,7 @@ public class FocusSessionServiceImpl implements FocusSessionService {
         );
         FocusSession focusSession = focusSessionMapper.toFocusSession(dto);
         if (focusSession.getStartedAt() == null) {
-            focusSession.setStartedAt(LocalDateTime.now());
+            focusSession.setStartedAt(Instant.now());
         }
         focusSession.setSchedule(schedule);
         focusSession.setTask(schedule.getTask());
@@ -83,7 +83,7 @@ public class FocusSessionServiceImpl implements FocusSessionService {
         }
         focusSessionMapper.updateFocusSession(dto, focusSession);
         if (cancelling && focusSession.getEndedAt() == null) {
-            focusSession.setEndedAt(LocalDateTime.now());
+            focusSession.setEndedAt(Instant.now());
         }
         if (cancelling) {
             closePause(focusSession, focusSession.getEndedAt());
@@ -106,7 +106,7 @@ public class FocusSessionServiceImpl implements FocusSessionService {
         if (focusSession.getStatus() != ProgressStatus.ACTIVE) {
             throw new InvalidRequestException("Only an active session can be paused");
         }
-        focusSession.setPausedAt(LocalDateTime.now());
+        focusSession.setPausedAt(Instant.now());
         focusSession.setStatus(ProgressStatus.PAUSED);
         focusSessionRepository.save(focusSession);
         return focusSessionMapper.toDto(focusSession);
@@ -119,7 +119,7 @@ public class FocusSessionServiceImpl implements FocusSessionService {
         if (focusSession.getStatus() != ProgressStatus.PAUSED) {
             throw new InvalidRequestException("Only a paused session can be resumed");
         }
-        closePause(focusSession, LocalDateTime.now());
+        closePause(focusSession, Instant.now());
         focusSession.setStatus(ProgressStatus.ACTIVE);
         focusSessionRepository.save(focusSession);
         return focusSessionMapper.toDto(focusSession);
@@ -132,7 +132,7 @@ public class FocusSessionServiceImpl implements FocusSessionService {
         if (!isRunning(focusSession)) {
             throw new InvalidRequestException("Only an active or paused session can be stopped");
         }
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
         closePause(focusSession, now);
         focusSession.setEndedAt(now);
         focusSession.setStatus(ProgressStatus.COMPLETED);
@@ -145,7 +145,7 @@ public class FocusSessionServiceImpl implements FocusSessionService {
         return focusSession.getStatus() == ProgressStatus.ACTIVE || focusSession.getStatus() == ProgressStatus.PAUSED;
     }
 
-    private void closePause(FocusSession focusSession, LocalDateTime at){
+    private void closePause(FocusSession focusSession, Instant at){
         if (focusSession.getPausedAt() == null) {
             return;
         }
@@ -159,8 +159,8 @@ public class FocusSessionServiceImpl implements FocusSessionService {
     }
 
     private void applyDuration(FocusSession focusSession){
-        LocalDateTime start = focusSession.getStartedAt();
-        LocalDateTime end = focusSession.getEndedAt();
+        Instant start = focusSession.getStartedAt();
+        Instant end = focusSession.getEndedAt();
         if (end == null) {
             focusSession.setDuration(null);
             return;

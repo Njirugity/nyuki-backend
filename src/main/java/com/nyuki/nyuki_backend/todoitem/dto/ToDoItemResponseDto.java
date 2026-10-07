@@ -1,6 +1,6 @@
 package com.nyuki.nyuki_backend.todoitem.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public record ToDoItemResponseDto(
@@ -8,7 +8,7 @@ public record ToDoItemResponseDto(
         String description,
         boolean completed,
         UUID toDoListId,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        Instant createdAt,
+        Instant updatedAt
 ) {
 }

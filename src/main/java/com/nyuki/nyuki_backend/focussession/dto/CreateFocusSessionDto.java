@@ -2,13 +2,13 @@ package com.nyuki.nyuki_backend.focussession.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public record CreateFocusSessionDto(
         @NotNull(message = "Schedule required")
         UUID scheduleId,
-        LocalDateTime startedAt,
-        LocalDateTime endedAt
+        Instant startedAt,
+        Instant endedAt
 ) {
 }

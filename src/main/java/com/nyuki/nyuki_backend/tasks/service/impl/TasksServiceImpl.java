@@ -25,7 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -116,7 +116,7 @@ public class TasksServiceImpl implements TasksService {
         if (task.getStatus() != ProgressStatus.COMPLETED) {
             task.setCompletedAt(null);
         } else if (previousStatus != ProgressStatus.COMPLETED) {
-            task.setCompletedAt(LocalDate.now());
+            task.setCompletedAt(Instant.now());
         }
     }
 

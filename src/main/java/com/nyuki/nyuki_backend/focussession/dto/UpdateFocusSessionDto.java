@@ -2,11 +2,11 @@ package com.nyuki.nyuki_backend.focussession.dto;
 
 import com.nyuki.nyuki_backend.common.enums.ProgressStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record UpdateFocusSessionDto(
-        LocalDateTime startedAt,
-        LocalDateTime endedAt,
+        Instant startedAt,
+        Instant endedAt,
         ProgressStatus status
 ) {
 }

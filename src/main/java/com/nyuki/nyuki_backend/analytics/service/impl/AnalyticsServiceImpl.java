@@ -8,8 +8,8 @@ import com.nyuki.nyuki_backend.tasks.repository.TasksRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,20 +21,20 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     private final ScheduleRepository scheduleRepository;
 
     @Override
-    public GoalCountDto getGoalsCount(String email, LocalDate today){
-        return goalsRepository.findTotalActiveCompletedOverDueGoals(email, today).
+    public GoalCountDto getGoalsCount(String email, Instant now){
+        return goalsRepository.findTotalActiveCompletedOverDueGoals(email, now).
                 orElse(new GoalCountDto(0L, 0L, 0L, 0L));
     }
 
     @Override
     public ActiveAndOverdueGoalsDto getActiveAndOverdueGoals(String email){
-        LocalDate today = LocalDate.now();
-        List<GoalSummaryDto> relevantGoals = goalsRepository.findActiveAndOverdueGoals(email, today);
+        Instant now = Instant.now();
+        List<GoalSummaryDto> relevantGoals = goalsRepository.findActiveAndOverdueGoals(email, now);
 
         List<GoalSummaryDto> active = new ArrayList<>();
         List<GoalSummaryDto> overdue = new ArrayList<>();
         for(GoalSummaryDto dto : relevantGoals){
-            if(dto.endDate() != null && dto.endDate().isBefore(today)){
+            if(dto.endDate() != null && dto.endDate().isBefore(now)){
                 overdue.add(dto);
             }else{
                 active.add(dto);
@@ -44,18 +44,18 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
     @Override
     public List<TaskCountByGoal> getTaskCountByGoal(String email){
-        LocalDate today = LocalDate.now();
-        return goalsRepository.findAllTaskCounts(email, today);
+        Instant now = Instant.now();
+        return goalsRepository.findAllTaskCounts(email, now);
     }
     @Override
-    public ActiveAndOverdueTasksDto getActiveAndOverdueTasks(String email, LocalDate today){
-        List<TaskSummaryDto> relevantTasks = tasksRepository.findActiveAndOverdueTask(email, today);
+    public ActiveAndOverdueTasksDto getActiveAndOverdueTasks(String email, Instant now){
+        List<TaskSummaryDto> relevantTasks = tasksRepository.findActiveAndOverdueTask(email, now);
 
         List<TaskSummaryDto> active = new ArrayList<>();
         List<TaskSummaryDto> overdue = new ArrayList<>();
 
         for(TaskSummaryDto dto : relevantTasks){
-            if(dto.dueDate() != null && dto.dueDate().isBefore(today)){
+            if(dto.dueDate() != null && dto.dueDate().isBefore(now)){
                 overdue.add(dto);
             }else {
                 active.add(dto);
@@ -64,25 +64,24 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return new ActiveAndOverdueTasksDto(active, overdue);
     }
     @Override
-    public TaskCountDto getTaskCount(String email, LocalDate today){
-        return tasksRepository.countAllCompletedActiveOverDueTasks(email,today).
+    public TaskCountDto getTaskCount(String email, Instant now){
+        return tasksRepository.countAllCompletedActiveOverDueTasks(email,now).
                 orElse(new TaskCountDto(0L, 0L, 0L, 0L));
     }
     @Override
-    public List<UpcomingScheduleDto> getAlmostDueSchedules(String email, LocalDateTime now, LocalDateTime windowEnd){
+    public List<UpcomingScheduleDto> getAlmostDueSchedules(String email, Instant now, Instant windowEnd){
         return scheduleRepository.findUpcomingSchedulesWithinWindow(email, now, windowEnd);
     }
 
     @Override
     public DashboardResponseDto getDashboardResponse(String email){
-        LocalDate today = LocalDate.now();
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime windowEnd = now.plusHours(1);
+        Instant now = Instant.now();
+        Instant windowEnd = now.plus(1, ChronoUnit.HOURS);
 
         return new DashboardResponseDto(
-                getActiveAndOverdueTasks(email, today),
-                getGoalsCount(email, today),
-                getTaskCount(email, today),
+                getActiveAndOverdueTasks(email, now),
+                getGoalsCount(email, now),
+                getTaskCount(email, now),
                 getAlmostDueSchedules(email, now, windowEnd)
         );
     }

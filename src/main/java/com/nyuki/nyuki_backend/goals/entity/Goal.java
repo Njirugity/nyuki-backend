@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -22,8 +22,8 @@ public class Goal extends BaseEntity {
     private UUID id;
     private String title;
     private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Instant startDate;
+    private Instant endDate;
     @Enumerated(EnumType.STRING)
     private ProgressStatus status;
     @Enumerated(EnumType.STRING)

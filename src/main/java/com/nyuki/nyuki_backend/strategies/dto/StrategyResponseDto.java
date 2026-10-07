@@ -1,6 +1,6 @@
 package com.nyuki.nyuki_backend.strategies.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public record StrategyResponseDto(
@@ -9,7 +9,7 @@ public record StrategyResponseDto(
         String description,
         UUID goalId,
         String goalTitle,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        Instant createdAt,
+        Instant updatedAt
 ) {
 }

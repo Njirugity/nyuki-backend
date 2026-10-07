@@ -1,10 +1,10 @@
 package com.nyuki.nyuki_backend.schedule.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record UpdateScheduleDto(
-        LocalDateTime startDateTime,
-        LocalDateTime endDateTime,
+        Instant startDateTime,
+        Instant endDateTime,
         String notes
 ) {
 }

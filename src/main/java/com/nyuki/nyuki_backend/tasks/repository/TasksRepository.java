@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -71,21 +71,21 @@ public interface TasksRepository extends JpaRepository<Task, UUID> {
                   com.nyuki.nyuki_backend.common.enums.ProgressStatus.ACTIVE,
                   com.nyuki.nyuki_backend.common.enums.ProgressStatus.PAUSED
               )
-        AND COALESCE(t.startDate, t.dueDate) <= :today
+        AND COALESCE(t.startDate, t.dueDate) <= :now
         ORDER BY t.dueDate ASC
     """)
-    List<TaskSummaryDto> findActiveAndOverdueTask(@Param("email")String email, @Param("today") LocalDate today);
+    List<TaskSummaryDto> findActiveAndOverdueTask(@Param("email")String email, @Param("now") Instant now);
 
     @Query("""
         SELECT new com.nyuki.nyuki_backend.analytics.dto.TaskCountDto(
             COUNT(t),
             COALESCE(SUM(CASE WHEN t.status = com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END ),0L),
             COALESCE(SUM(CASE WHEN t.status = com.nyuki.nyuki_backend.common.enums.ProgressStatus.ACTIVE THEN 1 ELSE 0 END ),0L),
-            COALESCE(SUM(CASE WHEN t.dueDate < :today AND t.status != com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END ),0L)
+            COALESCE(SUM(CASE WHEN t.dueDate < :now AND t.status != com.nyuki.nyuki_backend.common.enums.ProgressStatus.COMPLETED THEN 1 ELSE 0 END ),0L)
             ) FROM Task t
         WHERE t.owner.email = :email
     """)
-    Optional<TaskCountDto> countAllCompletedActiveOverDueTasks(@Param("email")String email, @Param("today") LocalDate today);
+    Optional<TaskCountDto> countAllCompletedActiveOverDueTasks(@Param("email")String email, @Param("now") Instant now);
 
 
 }

@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -26,9 +26,9 @@ public class Task extends BaseEntity {
     private UUID id;
     private String title;
     private String description;
-    private LocalDate startDate;
-    private LocalDate dueDate;
-    private LocalDate completedAt;
+    private Instant startDate;
+    private Instant dueDate;
+    private Instant completedAt;
     @Enumerated(EnumType.STRING)
     private ProgressStatus status;
     @Enumerated(EnumType.STRING)
